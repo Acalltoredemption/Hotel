@@ -1,34 +1,43 @@
 import {useState} from 'react';
+import RegisterForm from '../components/RegisterForm';
+import axios from 'axios';
+import {toast} from 'react-toastify';
 
-const Register = () => {
+
+const Register = ({history}) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleSubmit = () => {
-        alert('Send user info to backend')
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+       
+try {
+    const res = await axios.post(`${process.env.REACT_APP_API}/register`, {
+        name: name,
+        email: email,
+        password: password,
+    });
+    console.log('REGISTER USER =>', res);
+    toast.success('Register success. Please login.');
+    history.push('/login');
+} catch (err) {
+    console.log(err);
+   if(err.response.status === 400) toast.error('Register failed. Please try again!');
+};
+
     }
-
-    const registerForm = () => {
-        return (
-            <form onSubmit={handleSubmit}>
-                show the form <button type="submit">Submit</button>
-            </form>
-        )
-    }
-
-
+ 
     return (
         <>
         <div className="container-fluid bg-secondary p-5 text-center">
             <h1>Register</h1>
-
         </div>
 
         <div className="container">
             <div className="row">
                 <div className="col-md-6 offset-md-3">
-                    {registerForm()}
+                    <RegisterForm handleSubmit={handleSubmit} name={name} setName={setName} email={email} setEmail={setEmail} password={password} setPassword={setPassword} />
                 </div>
             </div>
         </div>
