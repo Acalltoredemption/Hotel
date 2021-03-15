@@ -7,6 +7,7 @@ import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Dashboard from './user/Dashboard';
 import PrivateRoute from './components/PrivateRoute';
+import DashboardSeller from './user/DashboardSeller';
 
 //
 
@@ -22,6 +23,7 @@ function App() {
       <Route exact path="/login" component={Login} />
       <Route exact path="/register" component={Register} />
       <PrivateRoute exact path="/dashboard" component={Dashboard} />
+      <PrivateRoute exact path="/dashboard/seller" component={DashboardSeller} />
     </Switch>
     </BrowserRouter>
   ); 
