@@ -2,12 +2,15 @@ import {toast} from 'react-toastify';
 import {login} from '../actions/auth';
 import LoginForm from '../components/LoginForm';
 import {useState} from 'react';
+import {useDispatch} from 'react-redux';
 
 
 
-const Login = () => {
+const Login = ({history}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const dispatch = useDispatch();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -17,7 +20,15 @@ const Login = () => {
             
             if(res.data) {
                 console.log('SAVE USER RES IN REDUX AND LOCAL STORAGE THEN REDIRECT ===> ');
-                console.log(res.data)
+                // console.log(res.data);
+                //save user and token to local storage
+                window.localStorage.setItem("auth", JSON.stringify(res.data));
+                //save user and token to redux
+                dispatch({
+                    type: 'LOGGED_IN_USER',
+                    payload: res.data,
+                });
+               history.push("/");
             }
         } catch (err) {
             console.log(err);
