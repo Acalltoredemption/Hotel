@@ -22,6 +22,12 @@ return (
     <div className="nav bg-light d-flex justify-content-between">
       <Link className="nav-link" to="/">Home</Link>
 
+      {auth !== null && ( 
+     
+    <Link className="nav-link" to="/dashboard">Dashboard</Link>
+
+     )}
+
       {auth !== null && (
 
     <a className="nav-link pointer" onClick={logout}>Logout</a>
