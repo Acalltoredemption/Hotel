@@ -9,6 +9,7 @@ import Dashboard from './user/Dashboard';
 import PrivateRoute from './components/PrivateRoute';
 import DashboardSeller from './user/DashboardSeller';
 import NewHotel from './hotels/NewHotel';
+import StripeCallback from './stripe/StripeCallback';
 
 //
 
@@ -26,6 +27,7 @@ function App() {
       <PrivateRoute exact path="/dashboard" component={Dashboard} />
       <PrivateRoute exact path="/dashboard/seller" component={DashboardSeller} />
       <PrivateRoute exact path="/hotels/new" component={NewHotel} />
+      <PrivateRoute exact path="/stripe/callback" component={StripeCallback} />
     </Switch>
     </BrowserRouter>
   ); 
