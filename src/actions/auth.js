@@ -13,4 +13,6 @@ export const updateUserInLocalStorage = (user, next) => {
         localStorage.setItem('auth', JSON.stringify(auth));
         next();
     }
-}
+};
+
+
