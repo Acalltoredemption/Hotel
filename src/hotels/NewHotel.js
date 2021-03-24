@@ -2,6 +2,13 @@ import {useState} from 'react';
 import {toast} from 'react-toastify';
 import AlgoliaPlaces from 'algolia-places-react';
 
+const config = {
+    appId: process.env.REACT_APP_ALGOLIA_APP_ID,
+    apiKey: process.env.REACT_APP_ALGOLIA_API_KEY,
+    language: 'en',
+    // countries: ['au'],
+};
+
 
 
 const NewHotel = () => {
@@ -42,6 +49,7 @@ const NewHotel = () => {
                 </label>
                 <input type="text" name="title" onChange={handleChange} placeholder="Title" className="form-control m-2" value={title} />
                 <textarea name="content" onChange={handleChange} placeholder="Content" className="form-control m-2" value={content} />
+                <AlgoliaPlaces className="form-control ml-2 mr-2" placeholder="Location" defaultValue={location} options={config} onChange={({suggestion}) => setValues({...values, location: suggestion.value })} style={{height: "50px"}} />
                 <input type="number" name="price" onChange={handleChange} placeholder="Price" className="form-control m-2" value={price} />
                 <input type="number" name="bed" onChange={handleChange} placeholder="Number of Beds" className="form-control m-2" value={bed} />
             </div>
