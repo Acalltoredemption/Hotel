@@ -1,8 +1,11 @@
 import {useState} from 'react';
 import {toast} from 'react-toastify';
-import AlgoliaPlaces from 'algolia-places-react';
-import {DatePicker} from 'antd';
+import {DatePicker, Select} from 'antd';
 import moment from 'moment';
+import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
+import {createHotel} from '../actions/hotel';
+
+const {Option} = Select;
 
 
 const config = {
@@ -19,7 +22,6 @@ const NewHotel = () => {
     const [values, setValues] = useState({
         title: '',
         content: '',
-        location: '',
         image: '',
         price: '',
         from: '',
@@ -27,10 +29,14 @@ const NewHotel = () => {
         bed: '',
     });
     const [preview, setPreview] = useState('https://via.placeholder.com/100x100.png?text=PREVIEW');
-    //destructuring variables from state
-    const {title, content, location, image, price, from, to, bed} = values;
-    const handleSubmit = (e) => {
 
+    const [location, setLocation] = useState('')
+    //destructuring variables from state
+    const {title, content, image, price, from, to, bed} = values;
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(values);
+        console.log(location.label);
     }
 
     const handleImageChange = (e) => {
@@ -43,6 +49,8 @@ const NewHotel = () => {
         setValues({...values, [e.target.name]: e.target.value});
     };
 
+
+
     const hotelForm = () => (
         <form onSubmit={handleSubmit}>
             <div className="form-group">
@@ -52,9 +60,18 @@ const NewHotel = () => {
                 </label>
                 <input type="text" name="title" onChange={handleChange} placeholder="Title" className="form-control m-2" value={title} />
                 <textarea name="content" onChange={handleChange} placeholder="Content" className="form-control m-2" value={content} />
-                <AlgoliaPlaces className="form-control ml-2 mr-2" placeholder="Location" defaultValue={location} options={config} onChange={({suggestion}) => setValues({...values, location: suggestion.value })} style={{height: "50px"}} />
+                <GooglePlacesAutocomplete  className="form-control ml-2 mr-2" name="locs" placeholder="Location"  selectProps={{
+          location,
+          onChange: setLocation,
+        }}defaultValue={location} style={{height: "50px"}} />
                 <input type="number" name="price" onChange={handleChange} placeholder="Price" className="form-control m-2" value={price} />
-                <input type="number" name="bed" onChange={handleChange} placeholder="Number of Beds" className="form-control m-2" value={bed} />
+                {/* <input type="number" name="bed" onChange={handleChange} placeholder="Number of Beds" className="form-control m-2" value={bed} /> */}
+                <Select onChange={(value) => setValues({...values, bed: value})} className="w-100 m-2" size="large" placeholder="Number of Beds">
+                    <Option key={1}>{1}</Option>
+                    <Option key={2}>{2}</Option>
+                    <Option key={3}>{3}</Option>
+                    <Option key={4}>{4}</Option>
+                </Select>
             </div>
             <DatePicker placeholder="From date" className="form-control m-2" disabledDate={(current) => current && current.valueOf() < moment().subtract(1, 'days')} onChange={(date, dateString) => setValues({...values, from:dateString})} />
             <DatePicker placeholder="To date" className="form-control m-2" disabledDate={(current) => current && current.valueOf() < moment().subtract(1, 'days')} onChange={(date, dateString) => setValues({...values, to:dateString})} />
@@ -77,6 +94,7 @@ const NewHotel = () => {
                 <div className="col-md-2">
                     <img src={preview} alt="Preview_image" className="img img-fluid m-2"/>
                     Image<pre>{JSON.stringify(values, null, 4)}</pre>
+                    {JSON.stringify(location.label)}
                 </div>
             </div>
         </div>
