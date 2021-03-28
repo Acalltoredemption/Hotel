@@ -16,10 +16,11 @@ const Home = () => {
     }
     return (
         <>
-        <div className="container-fluid h1 p-5 text-center">
+        <div className="container-fluid h1 bg-secondary p-5 text-center">
             <h1>All Hotels</h1>
         </div> 
         <div className="container-fluid">
+            <br></br>
             {/* <pre>{JSON.stringify(hotels, null, 4)}</pre> */}
             {hotels.map((h) => <SmallCard key={h._id} h={h} />)}
         </div>
