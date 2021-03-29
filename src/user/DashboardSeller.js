@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import {sellerHotels} from '../actions/hotel';
+import {sellerHotels, deleteHotel} from '../actions/hotel';
 import DashboardNav from '../components/DashboardNav';
 import ConnectNav from '../components/ConnectNav';
 import {Link} from 'react-router-dom';
@@ -34,7 +34,17 @@ const DashboardSeller = () => {
             toast.error('Stripe connect failed, Try again.');
             setLoading(false);
         }
-        }
+        };
+
+        const handleHotelDelete = async (hotelId) => {
+            if(!window.confirm('Are you sure?')) return;
+            deleteHotel(auth.token, hotelId).then(res => {
+                toast.success('Hotel Deleted');
+                loadSellersHotels();
+            });
+        };
+
+
     const connected = () => (
         <div className="container-fluid">
            <div className="row">
@@ -47,7 +57,7 @@ const DashboardSeller = () => {
            </div>
 
            <div className="row">
-              {hotels.map(h => <SmallCard key={h._id} h={h} owner={true} showViewMoreButton={false} />)}
+              {hotels.map(h => <SmallCard key={h._id} h={h} owner={true} showViewMoreButton={false} handleHotelDelete={handleHotelDelete} />)}
            </div>
         </div>
     );
