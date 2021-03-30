@@ -2,11 +2,14 @@ import React, {useState, useEffect} from 'react';
 import {read, diffDays} from '../actions/hotel';
 import {useStore} from 'react-redux';
 import moment from 'moment';
+import {useSelector} from 'react-redux';
 
-const ViewHotel = ({match}) => {
+const ViewHotel = ({match, history}) => {
 
     const [hotel, setHotel] = useState({});
     const [image, setImage] = useState('');
+
+    const {auth} = useSelector((state) => ({...state}));
 
     useEffect(() => {
         loadSellerHotel();
@@ -18,6 +21,11 @@ const ViewHotel = ({match}) => {
         setHotel(res.data);
         setImage(`${process.env.REACT_APP_API}/hotel/image/${res.data._id}`);
     };
+
+    const handleClick = e => {
+        e.preventDefault();
+        if (!auth) history.push('/login');
+    }
 
 
     return (
@@ -47,7 +55,7 @@ const ViewHotel = ({match}) => {
                         <p>To <br/> {moment(new Date(hotel.to)).format('MMMM DD YYYY, h:mm:ss')} </p>
                         <i>Posted by {hotel.postedBy && hotel.postedBy.name}</i>
                         <br/>
-                        <button className="btn btn-block btn-lg btn-primary mt-3">Book Now</button>
+                        <button onClick={handleClick} className="btn btn-block btn-lg btn-primary mt-3">{auth && auth.token ? 'Book Now' : 'Login to Book'}</button>
                 </div>
             </div>
         </div>
