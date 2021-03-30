@@ -11,6 +11,7 @@ import DashboardSeller from './user/DashboardSeller';
 import NewHotel from './hotels/NewHotel';
 import StripeCallback from './stripe/StripeCallback';
 import EditHotel from './hotels/EditHotel';
+import ViewHotel from './hotels/ViewHotel';
 
 //
 
@@ -25,6 +26,7 @@ function App() {
       <Route exact path="/" component={Home} />
       <Route exact path="/login" component={Login} />
       <Route exact path="/register" component={Register} />
+      <Route exact path="/hotel/:hotelId" component={ViewHotel} />
       <PrivateRoute exact path="/dashboard" component={Dashboard} />
       <PrivateRoute exact path="/dashboard/seller" component={DashboardSeller} />
       <PrivateRoute exact path="/hotels/new" component={NewHotel} />
