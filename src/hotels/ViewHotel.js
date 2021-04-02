@@ -3,11 +3,14 @@ import {read, diffDays} from '../actions/hotel';
 import {useStore} from 'react-redux';
 import moment from 'moment';
 import {useSelector} from 'react-redux';
+import {getSessionId} from '../actions/stripe';
+import {loadStripe} from '@stripe/stripe-js';
 
 const ViewHotel = ({match, history}) => {
 
     const [hotel, setHotel] = useState({});
     const [image, setImage] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const {auth} = useSelector((state) => ({...state}));
 
@@ -16,16 +19,27 @@ const ViewHotel = ({match, history}) => {
     }, []);
 
     const loadSellerHotel = async () => {
-        let res = await read(match.params.hotelId)
+        let res = await read(match.params.hotelId);
         // console.log(res);
         setHotel(res.data);
         setImage(`${process.env.REACT_APP_API}/hotel/image/${res.data._id}`);
     };
 
-    const handleClick = e => {
+    const handleClick = async (e) => {
         e.preventDefault();
+        setLoading(true);
         if (!auth) history.push('/login');
-    }
+       console.log(auth.token, match.params.hotelId)
+        let res = await getSessionId(auth.token, match.params.hotelId);
+        console.log('get sessionid response', res.data.sessionId)
+        const stripe = await loadStripe(process.env.REACT_APP_STRIPE_KEY);
+        console.log('hello')
+        stripe.redirectToCheckout({
+            sessionId: res.data.sessionId,
+        })
+        .then((result) => console.log(result))
+    };
+
 
 
     return (
@@ -55,7 +69,9 @@ const ViewHotel = ({match, history}) => {
                         <p>To <br/> {moment(new Date(hotel.to)).format('MMMM DD YYYY, h:mm:ss')} </p>
                         <i>Posted by {hotel.postedBy && hotel.postedBy.name}</i>
                         <br/>
-                        <button onClick={handleClick} className="btn btn-block btn-lg btn-primary mt-3">{auth && auth.token ? 'Book Now' : 'Login to Book'}</button>
+                        <button onClick={handleClick} className="btn btn-block btn-lg btn-primary mt-3" disabled={loading}>
+                         {loading ? "Loading..." : auth && auth.token ? 'Book Now' : 'Login to Book'}
+                            </button>
                 </div>
             </div>
         </div>
