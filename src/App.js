@@ -35,7 +35,7 @@ function App() {
       <PrivateRoute exact path="/stripe/callback" component={StripeCallback} />
       <PrivateRoute exact path="/hotel/edit/:hotelId" component={EditHotel} />
 
-      <PrivateRoute exact path="/stripe/success" component={StripeSuccess} />
+      <PrivateRoute exact path="/stripe/success/:hotelId" component={StripeSuccess} />
       <PrivateRoute exact path="/stripe/cancel" component={StripeCancel} />
     </Switch>
     </BrowserRouter>
